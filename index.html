@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" href="#">
+
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM Plex Mono">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="icon" href="images/ampersand.png">
+
+        <title>ampersand</title>
+    </head>
+    <body>
+        <div class="losePanel mono" tabindex="-1" role="dialog" id="youLost">
+            <div class="losePanelHeader">
+                #### f ####
+                <hr>
+            </div>
+            <div class="losePanelBody">
+                <span class="lighter">score:</span><div id="panelScore" class="rightSide">0</div><br>
+                <span class="lighter">hits:</span><div id="panelKills" class="rightSide">0</div><br>
+                <span class="lighter">bombs used:</span><div id="panelBombsUsed" class="rightSide">0</div><br>
+            </div>
+            <div class="losePanelFooter lighter">
+                press any key to try again
+            </div>
+        </div>
+        <div class="losePanel mono" style="height: 29vw;" tabindex="-1" role="dialog" id="infoPanel">
+            <div class="losePanelHeader">
+                #### ? ####
+                <hr>
+            </div>
+            <div class="losePanelBody" style="height: 8vw;">
+                <span class="lighter">move:</span><div class="rightSide">wasd</div><br>
+                <span class="lighter">use bomb:</span><div id="panelKills" class="rightSide">space</div><br>
+                <span class="lighter">objective:</span><div id="panelBombsUsed" class="rightSide">survive</div><br>
+                <hr>
+            </div>
+            <div class="panelExtra" style="padding-top: 1vw;">
+                Hit adjacent # using wasd. Bombs are @ and appear randomly. Try moving off the board and see what happens. 
+            </div>
+            <div class="losePanelFooter lighter">
+                press any key to continue
+            </div>
+        </div>
+        <div class="grayOut"></div>
+        <div class="info mono" id="info">??</div>
+        <div class="title">
+            ampersand
+        </div>
+        <div class="leftPanel mono">
+            <span class="lighter">score: </span><span id="sideScore">0</span><br>
+            <span class="lighter">bombs: </span><span id="sideBombs">3</span><br>
+            <span class="lighter">hits: &nbsp;</span><span id="sideKills">0</span><br>
+            <span class="lighter">best: &nbsp;</span><span class="lighter" id="sideHigh">0</span>
+        </div>
+        <div class="board">
+            <div class="square" style="left: 0vw; top: 0vw;" id="11"></div>
+            <div class="square" style="left: 5vw; top: 0vw;" id="12"></div>
+            <div class="square" style="left: 10vw; top: 0vw;" id="13"></div>
+            <div class="square" style="left: 15vw; top: 0vw;" id="14"></div>
+            <div class="square" style="left: 20vw; top: 0vw;" id="15"></div>
+            <div class="square" style="left: 25vw; top: 0vw;" id="16"></div>
+            <div class="square" style="left: 30vw; top: 0vw;" id="17"></div>
+            <div class="square" style="left: 35vw; top: 0vw;" id="18"></div>
+            <div class="square" style="left: 40vw; top: 0vw;" id="19"></div>
+            <div class="square" style="left: 0vw; top: 5vw;" id="21"></div>
+            <div class="square" style="left: 5vw; top: 5vw;" id="22"></div>
+            <div class="square" style="left: 10vw; top: 5vw;" id="23"></div>
+            <div class="square" style="left: 15vw; top: 5vw;" id="24"></div>
+            <div class="square" style="left: 20vw; top: 5vw;" id="25"></div>
+            <div class="square" style="left: 25vw; top: 5vw;" id="26"></div>
+            <div class="square" style="left: 30vw; top: 5vw;" id="27"></div>
+            <div class="square" style="left: 35vw; top: 5vw;" id="28"></div>
+            <div class="square" style="left: 40vw; top: 5vw;" id="29"></div>
+            <div class="square" style="left: 0vw; top: 10vw;" id="31"></div>
+            <div class="square" style="left: 5vw; top: 10vw;" id="32"></div>
+            <div class="square" style="left: 10vw; top: 10vw;" id="33"></div>
+            <div class="square" style="left: 15vw; top: 10vw;" id="34"></div>
+            <div class="square" style="left: 20vw; top: 10vw;" id="35"></div>
+            <div class="square" style="left: 25vw; top: 10vw;" id="36"></div>
+            <div class="square" style="left: 30vw; top: 10vw;" id="37"></div>
+            <div class="square" style="left: 35vw; top: 10vw;" id="38"></div>
+            <div class="square" style="left: 40vw; top: 10vw;" id="39"></div>
+            <div class="square" style="left: 0vw; top: 15vw;" id="41"></div>
+            <div class="square" style="left: 5vw; top: 15vw;" id="42"></div>
+            <div class="square" style="left: 10vw; top: 15vw;" id="43"></div>
+            <div class="square" style="left: 15vw; top: 15vw;" id="44"></div>
+            <div class="square" style="left: 20vw; top: 15vw;" id="45"></div>
+            <div class="square" style="left: 25vw; top: 15vw;" id="46"></div>
+            <div class="square" style="left: 30vw; top: 15vw;" id="47"></div>
+            <div class="square" style="left: 35vw; top: 15vw;" id="48"></div>
+            <div class="square" style="left: 40vw; top: 15vw;" id="49"></div>
+            <div class="square" style="left: 0vw; top: 20vw;" id="51"></div>
+            <div class="square" style="left: 5vw; top: 20vw;" id="52"></div>
+            <div class="square" style="left: 10vw; top: 20vw;" id="53"></div>
+            <div class="square" style="left: 15vw; top: 20vw;" id="54"></div>
+            <div class="square" style="left: 20vw; top: 20vw;" id="55"></div>
+            <div class="square" style="left: 25vw; top: 20vw;" id="56"></div>
+            <div class="square" style="left: 30vw; top: 20vw;" id="57"></div>
+            <div class="square" style="left: 35vw; top: 20vw;" id="58"></div>
+            <div class="square" style="left: 40vw; top: 20vw;" id="59"></div>
+            <div class="square" style="left: 0vw; top: 25vw;" id="61"></div>
+            <div class="square" style="left: 5vw; top: 25vw;" id="62"></div>
+            <div class="square" style="left: 10vw; top: 25vw;" id="63"></div>
+            <div class="square" style="left: 15vw; top: 25vw;" id="64"></div>
+            <div class="square" style="left: 20vw; top: 25vw;" id="65"></div>
+            <div class="square" style="left: 25vw; top: 25vw;" id="66"></div>
+            <div class="square" style="left: 30vw; top: 25vw;" id="67"></div>
+            <div class="square" style="left: 35vw; top: 25vw;" id="68"></div>
+            <div class="square" style="left: 40vw; top: 25vw;" id="69"></div>
+            <div class="square" style="left: 0vw; top: 30vw;" id="71"></div>
+            <div class="square" style="left: 5vw; top: 30vw;" id="72"></div>
+            <div class="square" style="left: 10vw; top: 30vw;" id="73"></div>
+            <div class="square" style="left: 15vw; top: 30vw;" id="74"></div>
+            <div class="square" style="left: 20vw; top: 30vw;" id="75"></div>
+            <div class="square" style="left: 25vw; top: 30vw;" id="76"></div>
+            <div class="square" style="left: 30vw; top: 30vw;" id="77"></div>
+            <div class="square" style="left: 35vw; top: 30vw;" id="78"></div>
+            <div class="square" style="left: 40vw; top: 30vw;" id="79"></div>
+            <div class="square" style="left: 0vw; top: 35vw;" id="81"></div>
+            <div class="square" style="left: 5vw; top: 35vw;" id="82"></div>
+            <div class="square" style="left: 10vw; top: 35vw;" id="83"></div>
+            <div class="square" style="left: 15vw; top: 35vw;" id="84"></div>
+            <div class="square" style="left: 20vw; top: 35vw;" id="85"></div>
+            <div class="square" style="left: 25vw; top: 35vw;" id="86"></div>
+            <div class="square" style="left: 30vw; top: 35vw;" id="87"></div>
+            <div class="square" style="left: 35vw; top: 35vw;" id="88"></div>
+            <div class="square" style="left: 40vw; top: 35vw;" id="89"></div>
+            <div class="square" style="left: 0vw; top: 40vw;" id="91"></div>
+            <div class="square" style="left: 5vw; top: 40vw;" id="92"></div>
+            <div class="square" style="left: 10vw; top: 40vw;" id="93"></div>
+            <div class="square" style="left: 15vw; top: 40vw;" id="94"></div>
+            <div class="square" style="left: 20vw; top: 40vw;" id="95"></div>
+            <div class="square" style="left: 25vw; top: 40vw;" id="96"></div>
+            <div class="square" style="left: 30vw; top: 40vw;" id="97"></div>
+            <div class="square" style="left: 35vw; top: 40vw;" id="98"></div>
+            <div class="square" style="left: 40vw; top: 40vw;" id="99"></div>
+            <div class="ampersand">&</div>
+        </div>
+
+
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <!-- Our js file -->
+        <script src="js/main.js"></script>
+    </body>
+</html>

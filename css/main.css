@@ -1,0 +1,176 @@
+body {
+    background-color: rgb(114, 114, 114);
+}
+
+.square {
+    background-color: rgba(255, 255, 255, 0);
+    outline: 1px solid rgb(238, 238, 238);
+    position: absolute;
+    display: inline-block;
+    width: 5vw;
+    height: 5vw;
+}
+
+.title {
+    font-size: 4vw;
+    color: white;
+    width: 100%;
+    text-align: center;
+    text-shadow: 2px 2px 4px #0000006c;
+    font-family: 'IBM Plex Mono';
+}
+
+.board {
+    position: absolute;
+    top: 7vw;
+    left: 27.5vw;
+    width: 45vw;
+    height: 45vw;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.ampersand {
+    position: absolute;
+    width: 3vw;
+    height: 3vw;
+    top: 21vw;
+    left: 21vw;
+    background-color: rgb(114, 114, 114);
+    color: white;
+    font-size: 2vw;
+    text-align: center;
+    border-radius: 0.5vw;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-family: 'IBM Plex Mono';
+}
+
+.enemy {
+    position: absolute;
+    width: 3vw;
+    height: 3vw;
+    top: 1vw;
+    left: 1vw;
+    background-color: rgb(27, 27, 27);
+    color: white;
+    font-size: 2vw;
+    text-align: center;
+    border-radius: 0.5vw;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-family: 'IBM Plex Mono';
+}
+
+.bomb {
+    position: absolute;
+    width: 3vw;
+    height: 3vw;
+    top: 1vw;
+    left: 1vw;
+    background-color: rgb(226, 225, 225);
+    color: rgb(37, 37, 37);
+    font-size: 2vw;
+    text-align: center;
+    border-radius: 0.5vw;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-family: 'IBM Plex Mono';
+}
+
+.mono {
+    font-family: 'IBM Plex Mono';
+}
+
+.grayOut {
+    position: fixed;
+    display: none;
+    width: 100vw;
+    height: 100vw;
+    z-index: 998;
+    background-color: rgba(0, 0, 0, 0.404);
+}
+
+.losePanel {
+    color: rgb(37, 37, 37);
+    padding: 1.5vw;
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: none;
+    width: 20vw;
+    height: 21vw;
+    top: 14.5vw;
+    left: 40vw;
+    z-index: 999;
+}
+
+.losePanelHeader {
+    text-align: center;
+    font-size: 2vw;
+    width: 100%;
+    height: 5vw;
+}
+
+.losePanelBody {
+    text-align: left;
+    font-size: 1.5vw;
+    width: 100%;
+    height: 12vw;
+}
+
+.losePanelFooter {
+    text-align: center;
+    font-size: 1vw;
+    width: 100%;
+    height: 2vw;
+}
+
+.panelExtra {
+    text-align: left;
+    font-size: 1.2vw;
+    width: 100%;
+    height: 12vw;
+}
+
+.lighter {
+    color: rgb(119, 119, 119);
+}
+
+hr {
+    border: .1vw dotted rgb(37, 37, 37);
+}
+
+.leftPanel {
+    background-color: rgba(0, 0, 0, 0.507);
+    position: absolute;
+    font-size: 1.2vw;
+    left: 12vw;
+    width: 12vw;
+    top: 12vw;
+    height: 9vw;
+    padding: 1vw;
+    color: white;
+}
+
+.rightSide {
+    position: absolute;
+    display: inline-block;
+    right: 1.5vw;
+}
+
+.info {
+    position: absolute;
+    left: 73.5vw;
+    top: 7.5vw;
+    width: 2.6vw;
+    height: 2.6vw;
+    border-radius: 50%;
+    color: white;
+    background-color: rgb(37, 37, 37);
+    text-align: center;
+    font-size: 1vw;
+    padding-top: .55vw;
+    cursor: pointer;
+}
+
+.info:hover {
+    background-color: rgb(43, 43, 43);
+}
