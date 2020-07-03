@@ -25,7 +25,9 @@
             <div class="losePanelBody">
                 <span class="lighter">score:</span><div id="panelScore" class="rightSide">0</div><br>
                 <span class="lighter">hits:</span><div id="panelKills" class="rightSide">0</div><br>
+                <span class="lighter">highest streak:</span><div id="panelStreak" class="rightSide">0</div><br>
                 <span class="lighter">bombs used:</span><div id="panelBombsUsed" class="rightSide">0</div><br>
+                <span class="lighter">turns:</span><div id="panelSteps" class="rightSide">0</div>
             </div>
             <div class="losePanelFooter lighter">
                 press any key to try again
@@ -49,6 +51,9 @@
                 press any key to continue
             </div>
         </div>
+        <div class="popup mono" id="streakPanel" style="display: none;">
+            <span class="lighter">streak: </span><span id="streak">0</span>
+        </div>
         <div class="grayOut"></div>
         <div class="info mono" id="info">??</div>
         <div class="title">
@@ -58,6 +63,7 @@
             <span class="lighter">score: </span><span id="sideScore">0</span><br>
             <span class="lighter">bombs: </span><span id="sideBombs">3</span><br>
             <span class="lighter">hits: &nbsp;</span><span id="sideKills">0</span><br>
+            <span class="lighter">turns: </span><span id="sideSteps">0</span><br>
             <span class="lighter">best: &nbsp;</span><span class="lighter" id="sideHigh">0</span>
         </div>
         <div class="board">

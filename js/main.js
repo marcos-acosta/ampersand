@@ -1,16 +1,10 @@
-const ONESQ = 5;
-const LEFT = [0, -1];
-const RIGHT = [0, 1];
-const UP = [-1, 0];
-const DOWN = [1, 0];
-const BOMB_ZOME = [[1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1]];
 var am_pos = [4, 4]
 var enemies = []
 var bomb_list = []
 var ex_count = 0;
 var en_count = 0;
 var b_count = 0;
-var enemy_threshold = .55;
+var enemy_threshold = .65;
 var bomb_threshold = .95;
 var score = 0;
 var bombs = 3;
@@ -20,6 +14,19 @@ var bombs_used = 0;
 var time_out = false;
 var game_over = false;
 var valid_move = false;
+var steps = 0;
+var width = 9;
+var ONESQ = 45 / width;
+var streak = 0;
+var killed = false;
+var highest_streak = 0;
+const LEFT = [0, -1];
+const RIGHT = [0, 1];
+const UP = [-1, 0];
+const DOWN = [1, 0];
+const BOMB_ZOME = [[1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1]];
+const EVEN = '0';
+const ODD = '1';
 
 $(document).ready(function() {
     $("#info").click(function() {
@@ -50,6 +57,7 @@ $(document).keypress(function(event) {
         } else if (event.which == 32) {
             if (bombs > 0) {
                 valid_move = true;
+                streak = 0;
                 useBomb();
                 bombs--;
                 bombs_used++;
@@ -58,6 +66,10 @@ $(document).keypress(function(event) {
             }
         }
         if (valid_move) {
+            steps++;
+            if (steps % 10 == 0) {
+                enemy_threshold -= .01;
+            }
             score++;
             if ('wasd'.includes(char)) {
                 if (bombPresent(am_pos)) {
@@ -91,10 +103,14 @@ function reset() {
     if (score > high) {
         high = score;
     }
+    streak = 0;
+    highest_streak = 0;
     bombs_used = 0;
     score = 0;
+    steps = 0;
     kills = 0;
     bombs = 3;
+    enemy_threshold = 0.65;
     updateStats();
     enemies = [];
     bomb_list = [];
@@ -106,12 +122,15 @@ function reset() {
 }
 
 function moveAmpersand(direction) {
+    killed = false;
     if (direction == 'left') {
         if (am_pos[1] == 0) {
             nudge(direction);
+            flipAll();
         } else if (enemyPresent(c_add(am_pos, LEFT))) {
             nudge(direction);
             attack(LEFT);
+            flipAll();
         } else {
             $(".ampersand").animate({left: ((am_pos[1]-1)*ONESQ + .75) + 'vw'}, 60);
             $(".ampersand").animate({left: ((am_pos[1]-1)*ONESQ + 1) + 'vw'}, 10);
@@ -120,9 +139,11 @@ function moveAmpersand(direction) {
     } else if (direction == 'right') {
         if (am_pos[1] == 8) {
             nudge(direction)
+            flipAll();
         } else if (enemyPresent(c_add(am_pos, RIGHT))) {
             nudge(direction);
             attack(RIGHT);
+            flipAll();
         } else {
             $(".ampersand").animate({left: ((am_pos[1]+1)*ONESQ + 1.25) + 'vw'}, 60);
             $(".ampersand").animate({left: ((am_pos[1]+1)*ONESQ + 1) + 'vw'}, 10);
@@ -131,9 +152,11 @@ function moveAmpersand(direction) {
     } else if (direction == 'up') {
         if (am_pos[0] == 0) {
             nudge(direction)
+            flipAll();
         } else if (enemyPresent(c_add(am_pos, UP))) {
             nudge(direction);
             attack(UP);
+            flipAll();
         } else {
             $(".ampersand").animate({top: ((am_pos[0]-1)*ONESQ + 0.75) + 'vw'}, 60);
             $(".ampersand").animate({top: ((am_pos[0]-1)*ONESQ + 1) + 'vw'}, 10);
@@ -142,14 +165,19 @@ function moveAmpersand(direction) {
     } else {
         if (am_pos[0] == 8) {
             nudge(direction)
+            flipAll();
         } else if (enemyPresent(c_add(am_pos, DOWN))) {
             nudge(direction);
             attack(DOWN);
+            flipAll();
         } else {
             $(".ampersand").animate({top: ((am_pos[0]+1)*ONESQ + 1.25) + 'vw'}, 60);
             $(".ampersand").animate({top: ((am_pos[0]+1)*ONESQ + 1) + 'vw'}, 10);
             am_pos[0]++;
         }
+    }
+    if (!killed) {
+        killStreak();
     }
 }
 
@@ -178,8 +206,16 @@ function shake() {
 function attack(direction) {
     let attack_pos = c_add(am_pos, direction);
     removeEnemy(attack_pos);
-    score += 10;
+    killed = true;
     kills++;
+    streak++;
+    score += streak * 10;
+    if (streak > highest_streak) {
+        highest_streak = streak;
+    }
+    if (streak >= 3) {
+        showStreak();
+    }
     updateStats();
 }
 
@@ -228,7 +264,8 @@ function newEnemy() {
 function addEnemy(coordinate) {
     let enemy = {
         id: en_count,
-        position: coordinate
+        position: coordinate,
+        odd: isOdd(coordinate)
     }
     enemies.push(enemy);
     en_count++;
@@ -281,7 +318,8 @@ function animateEnemyEntrance(enemy, edge) {
     } else {
         top_left = ['46', enemy.position[1]*ONESQ + 1];
     }
-    $(".board").append('<div class="enemy" id="en' + enemy.id + '" style="z-index: 5; top: ' + top_left[0] + 'vw; left:' + top_left[1] + 'vw; opacity: 0;">#</div>');
+    let text = getEvenOdd(enemy.odd);
+    $(".board").append('<div class="enemy" id="en' + enemy.id + '" style="z-index: 5; top: ' + top_left[0] + 'vw; left:' + top_left[1] + 'vw; opacity: 0;">' + text + '</div>');
     $("#en" + enemy.id).animate({opacity: 1, left: (enemy.position[1]*ONESQ + 1) + 'vw', top: (enemy.position[0]*ONESQ + 1) + 'vw'}, 70);
 }
 
@@ -314,6 +352,8 @@ function end_game() {
     $("#panelScore").html(score);
     $("#panelKills").html(kills);
     $("#panelBombsUsed").html(bombs_used);
+    $("#panelSteps").html(steps);
+    $("#panelStreak").html(highest_streak);
     $("#youLost").slideDown(70);
     $(".grayOut").fadeIn(70);
 }
@@ -452,6 +492,7 @@ function updateStats() {
     $("#sideScore").html(score);
     $("#sideBombs").html(bombs);
     $("#sideKills").html(kills);
+    $("#sideSteps").html(steps);
     $("#sideHigh").html(high);
 }
 
@@ -464,6 +505,7 @@ function useBomb() {
             kills++;
         }
     }
+    flipAll();
 }
 
 function newBomb() {
@@ -508,4 +550,37 @@ function collectBombAt(coordinate) {
         $("#b" + deleted.id).remove();
     });
     bombs++;
+}
+
+function isOdd(coordinate) {
+    if ((coordinate[0] + am_pos[0] + coordinate[1] + am_pos[1])%2 == 0) {
+        return true;
+    }
+    return false;
+}
+
+function flipAll() {
+    enemies.forEach(function(enemy) {
+        enemy.odd = !enemy.odd;
+        $("#en" + enemy.id).html(getEvenOdd(enemy.odd));
+    });
+}
+
+function getEvenOdd(odd) {
+    if (odd) {
+        return ODD;
+    } else {
+        return EVEN;
+    }
+}
+
+function showStreak() {
+    $("#streakPanel").slideUp(70);
+    $("#streak").html(streak);
+    $("#streakPanel").slideDown(70);
+}
+
+function killStreak() {
+    streak = 0;
+    $("#streakPanel").slideUp(70);
 }

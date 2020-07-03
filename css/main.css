@@ -145,9 +145,10 @@ hr {
     left: 12vw;
     width: 12vw;
     top: 12vw;
-    height: 9vw;
+    height: 10.75vw;
     padding: 1vw;
     color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .rightSide {
@@ -173,4 +174,21 @@ hr {
 
 .info:hover {
     background-color: rgb(43, 43, 43);
+}
+
+.popup {
+    background-color: rgba(0, 0, 0, 0.507);
+    position: absolute;
+    font-size: 1.2vw;
+    left: 12vw;
+    width: 12vw;
+    top: 25vw;
+    height: 3vw;
+    padding: 1vw;
+    color: white;
+    z-index: 997;
+    text-align: center;
+    margin: auto;
+    padding-top: .6vw;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
