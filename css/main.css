@@ -22,7 +22,7 @@ body {
 
 .board {
     position: absolute;
-    top: 7vw;
+    top: 6vw;
     left: 27.5vw;
     width: 45vw;
     height: 45vw;
@@ -58,6 +58,7 @@ body {
     border-radius: 0.5vw;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     font-family: 'IBM Plex Mono';
+    z-index: 10;
 }
 
 .bomb {
@@ -127,7 +128,7 @@ body {
     text-align: left;
     font-size: 1.2vw;
     width: 100%;
-    height: 12vw;
+    height: 22vw;
 }
 
 .lighter {
@@ -160,7 +161,7 @@ hr {
 .info {
     position: absolute;
     left: 73.5vw;
-    top: 7.5vw;
+    top: 6.5vw;
     width: 2.6vw;
     height: 2.6vw;
     border-radius: 50%;
@@ -191,4 +192,61 @@ hr {
     margin: auto;
     padding-top: .6vw;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 5vw;
+    height: 2.5vw;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(156, 156, 156);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 1.5vw;
+    width: 1.5vw;
+    left: .5vw;
+    bottom: .5vw;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: rgb(156, 156, 156);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px rgb(156, 156, 156);
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(2.5vw);
+    -ms-transform: translateX(2.5vw);
+    transform: translateX(2.5vw);
+}
+
+.colorSwitch {
+    position: absolute;
+    left: 47.5vw;
+    top: 52vw;
 }

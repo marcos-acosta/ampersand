@@ -27,6 +27,56 @@ const DOWN = [1, 0];
 const BOMB_ZOME = [[1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1]];
 const EVEN = '0';
 const ODD = '1';
+const BW_COLORS = {
+    ampersand: {
+        background_color: 'rgb(114, 114, 114)',
+        color: 'white'
+    },
+    enemy: {
+        background_color_even: 'black',
+        background_color_odd: 'black',
+        color: 'white'
+    },
+    bomb: {
+        background_color: 'rgb(226, 225, 225)',
+        color: 'rgb(37, 37, 37)'
+    },
+    green_text: {
+        color: 'white'
+    },
+    red_text: {
+        color: 'white'
+    },
+    yellow_text: {
+        color: 'white'
+    }
+}
+const COLOR_COLORS = {
+    ampersand: {
+        background_color: 'rgb(37, 37, 37)',
+        color: 'rgb(46, 201, 32)'
+    },
+    enemy: {
+        background_color_even: 'rgb(24, 31, 99)',
+        background_color_odd: 'rgb(99, 29, 24)',
+        color: 'white'
+    },
+    bomb: {
+        background_color: 'rgb(212, 191, 32)',
+        color: 'rgb(37, 37, 37)'
+    },
+    green_text: {
+        color: 'rgb(46, 201, 32)'
+    },
+    red_text: {
+        color: 'rgb(245, 93, 66)'
+    },
+    yellow_text: {
+        color: 'rgb(212, 191, 32)'
+    }
+}
+var bw = true;
+var color_scheme = BW_COLORS;
 
 $(document).ready(function() {
     $("#info").click(function() {
@@ -35,6 +85,11 @@ $(document).ready(function() {
             $("#infoPanel").slideDown(70);
             $(".grayOut").fadeIn(70);
         }
+    });
+    $("#colorSwitch").change(function() {
+        $(this).blur();
+        toggleColors();
+        resetAllColors();
     });
 });
 
@@ -54,7 +109,7 @@ $(document).keypress(function(event) {
         } else if (char == 'd') {
             moveAmpersand('right');
             valid_move = true;
-        } else if (event.which == 32) {
+        } else if (char == 'r') {
             if (bombs > 0) {
                 valid_move = true;
                 streak = 0;
@@ -69,15 +124,15 @@ $(document).keypress(function(event) {
             steps++;
             if (steps % 10 == 0) {
                 enemy_threshold -= .01;
+                bomb_threshold -= .001;
             }
             score++;
-            if ('wasd'.includes(char)) {
-                if (bombPresent(am_pos)) {
-                    collectBombAt(am_pos);
-                }
+            if (bombPresent(am_pos)) {
+                collectBombAt(am_pos);
             }
             updateStats();
             moveEnemies();
+            resetAllEnemyOdds();
             if (Math.random() > enemy_threshold) {
                 newEnemy();
             }
@@ -319,8 +374,17 @@ function animateEnemyEntrance(enemy, edge) {
         top_left = ['46', enemy.position[1]*ONESQ + 1];
     }
     let text = getEvenOdd(enemy.odd);
-    $(".board").append('<div class="enemy" id="en' + enemy.id + '" style="z-index: 5; top: ' + top_left[0] + 'vw; left:' + top_left[1] + 'vw; opacity: 0;">' + text + '</div>');
+    let color = getColor(enemy.odd);
+    $(".board").append('<div class="enemy" id="en' + enemy.id + '" style="z-index: 5; top: ' + top_left[0] + 'vw; left:' + top_left[1] + 'vw; opacity: 0; background-color: ' + color + '; color: ' + color_scheme.enemy.color + ';">' + text + '</div>');
     $("#en" + enemy.id).animate({opacity: 1, left: (enemy.position[1]*ONESQ + 1) + 'vw', top: (enemy.position[0]*ONESQ + 1) + 'vw'}, 70);
+}
+
+function getColor(odd) {
+    if (odd) {
+        return color_scheme.enemy.background_color_odd;
+    } else {
+        return color_scheme.enemy.background_color_even;
+    }
 }
 
 function distance(c1, c2) {
@@ -349,6 +413,7 @@ function moveEnemies() {
 function end_game() {
     time_out = true;
     game_over = true;
+    $("#streakPanel").slideUp(70);
     $("#panelScore").html(score);
     $("#panelKills").html(kills);
     $("#panelBombsUsed").html(bombs_used);
@@ -517,10 +582,10 @@ function newBomb() {
             return;
         }
         coord = [Math.floor(Math.random()*9), Math.floor(Math.random()*9)];
-    } while (squareOccupied(coord));
+    } while (squareOccupied(coord) || bombPresent(coord));
     bomb = addBomb(coord);
     top_left = [bomb.position[0]*ONESQ + 1, bomb.position[1]*ONESQ + 1]
-    $(".board").append('<div class="bomb" id="b' + bomb.id + '" style="top: ' + top_left[0] + 'vw; left:' + top_left[1] + 'vw; display: none;">@</div>');
+    $(".board").append('<div class="bomb" id="b' + bomb.id + '" style="top: ' + top_left[0] + 'vw; left:' + top_left[1] + 'vw; display: none; background-color: ' + color_scheme.bomb.background_color + '; color: ' + color_scheme.bomb.color + ';">@</div>');
     $("#b" + bomb.id).fadeIn(70);
 }
 
@@ -562,7 +627,9 @@ function isOdd(coordinate) {
 function flipAll() {
     enemies.forEach(function(enemy) {
         enemy.odd = !enemy.odd;
+        let color = getColor(enemy.odd);
         $("#en" + enemy.id).html(getEvenOdd(enemy.odd));
+        $("#en" + enemy.id).css('background-color', color);
     });
 }
 
@@ -583,4 +650,43 @@ function showStreak() {
 function killStreak() {
     streak = 0;
     $("#streakPanel").slideUp(70);
+}
+
+function toggleColors() {
+    bw = !bw;
+    if (bw) {
+        color_scheme = BW_COLORS;
+    } else {
+        color_scheme = COLOR_COLORS;
+    }
+}
+
+function resetAllColors() {
+    $(".ampersand").css('background-color', color_scheme.ampersand.background_color)
+    $(".ampersand").css('color', color_scheme.ampersand.color)
+    enemies.forEach(function(enemy) {
+        let color = getColor(enemy.odd);
+        $("#en" + enemy.id).css('background-color', color);
+        $("#en" + enemy.id).css('color', color_scheme.enemy.color);
+    });
+    bomb_list.forEach(function(bomb) {
+        $("#b" + bomb.id).css('background-color', color_scheme.bomb.background_color);
+        $("#b" + bomb.id).css('color', color_scheme.bomb.color);
+    });
+    $("#sideScore").css('color', color_scheme.green_text.color);
+    $("#panelScore").css('color', color_scheme.green_text.color);
+    $("#streak").css('color', color_scheme.red_text.color);
+    $("#panelStreak").css('color', color_scheme.red_text.color);
+    $("#sideBombs").css('color', color_scheme.yellow_text.color);
+    $("#panelBombsUsed").css('color', color_scheme.yellow_text.color);
+    $("#f").css('color', color_scheme.red_text.color);
+}
+
+function resetAllEnemyOdds() {
+    enemies.forEach(function(enemy) {
+        enemy.odd = isOdd(enemy.position);
+        let color = getColor(enemy.odd);
+        $("#en" + enemy.id).css('background-color', color);
+        $("#en" + enemy.id).css('color', color_scheme.enemy.color);
+    });
 }

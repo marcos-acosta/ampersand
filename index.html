@@ -19,7 +19,7 @@
     <body>
         <div class="losePanel mono" tabindex="-1" role="dialog" id="youLost">
             <div class="losePanelHeader">
-                #### f ####
+                #### <span id="f">f</span> ####
                 <hr>
             </div>
             <div class="losePanelBody">
@@ -33,19 +33,19 @@
                 press any key to try again
             </div>
         </div>
-        <div class="losePanel mono" style="height: 29vw;" tabindex="-1" role="dialog" id="infoPanel">
+        <div class="losePanel mono" style="height: 39vw; top: 9vw;" tabindex="-1" role="dialog" id="infoPanel">
             <div class="losePanelHeader">
                 #### ? ####
                 <hr>
             </div>
             <div class="losePanelBody" style="height: 8vw;">
                 <span class="lighter">move:</span><div class="rightSide">wasd</div><br>
-                <span class="lighter">use bomb:</span><div id="panelKills" class="rightSide">space</div><br>
+                <span class="lighter">use bomb:</span><div id="panelKills" class="rightSide">r</div><br>
                 <span class="lighter">objective:</span><div id="panelBombsUsed" class="rightSide">survive</div><br>
                 <hr>
             </div>
             <div class="panelExtra" style="padding-top: 1vw;">
-                Hit adjacent # using wasd. Bombs are @ and appear randomly. Try moving off the board and see what happens. 
+                hit adjacent 0s and 1s using wasd. there is no difference between 0s and 1s but you'll find the numbers helpful. bombs are @ and appear randomly. try hitting the edges, this will be useful. enemies cannot move diagonally. color switch at bottom.
             </div>
             <div class="losePanelFooter lighter">
                 press any key to continue
@@ -150,6 +150,10 @@
             <div class="square" style="left: 40vw; top: 40vw;" id="99"></div>
             <div class="ampersand">&</div>
         </div>
+        <label class="switch colorSwitch" id="colorSwitch">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
 
 
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
