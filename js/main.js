@@ -1,30 +1,8 @@
-var am_pos = [4, 4]
-var enemies = []
-var bomb_list = []
-var ex_count = 0;
-var en_count = 0;
-var b_count = 0;
-var enemy_threshold = .65;
-var bomb_threshold = .92;
-var score = 0;
-var bombs = 3;
-var kills = 0;
-var high = 0;
-var bombs_used = 0;
-var time_out = false;
-var game_over = false;
-var valid_move = false;
-var steps = 0;
-var width = 9;
-var ONESQ = 45 / width;
-var streak = 0;
-var killed = false;
-var highest_streak = 0;
 const LEFT = [0, -1];
 const RIGHT = [0, 1];
 const UP = [-1, 0];
 const DOWN = [1, 0];
-const BOMB_ZOME = [[1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1]];
+const BOMB_ZONE = [[1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1]];
 const EVEN = '0';
 const ODD = '1';
 const BW_COLORS = {
@@ -99,7 +77,32 @@ const COLOR_COLORS = {
         color: 'rgb(245, 93, 66)'
     }
 }
+const ARROWS = [39, 38, 37, 40];
+const WASD = [68, 87, 65, 83];
+const ONESQ = 5;
+var am_pos = [4, 4]
+var enemies = []
+var en_count = 0;
+var bomb_list = []
+var b_count = 0;
+var enemy_threshold = .65;
+var bomb_threshold = .92;
+var score = 0;
+var bombs = 3;
+var kills = 0;
+var steps = 0;
+var high = 0;
+var bombs_used = 0;
+var streak = 0;
+var highest_streak = 0;
+var killed = false;
+var new_high = false;
+var time_out = false;
+var game_over = false;
+var valid_move = false;
 var bw = true;
+var use_wasd = true;
+var move_scheme = WASD;
 var color_scheme = BW_COLORS;
 
 $(document).ready(function() {
@@ -110,6 +113,25 @@ $(document).ready(function() {
             $(".grayOut").fadeIn(70);
         }
     });
+    $("#controls").click(function() {
+        if (!game_over) {
+            time_out = true;
+            $("#controlPanel").slideDown(70);
+            $(".grayOut").fadeIn(70);
+        }
+    });
+    $("#toggleMove").click(function() {
+        use_wasd = !use_wasd;
+        if (use_wasd) {
+            move_scheme = WASD;
+            $(this).html('wasd');
+            $("#helpMove").html('wasd');
+        } else {
+            move_scheme = ARROWS;
+            $(this).html('arrows');
+            $("#helpMove").html('arrows');
+        }
+    });
     $("#colorSwitch").change(function() {
         $(this).blur();
         toggleColors();
@@ -117,26 +139,16 @@ $(document).ready(function() {
     });
 });
 
-$(document).keypress(function(event) {
+document.onkeydown = function(event) {
     valid_move = false;
     if (!time_out) {
-        char = String.fromCharCode(event.which);
-        if (char == 'w') {
-            moveAmpersand('up');
+        if (move_scheme.includes(event.which)) {
+            moveAmpersand(event.which);
             valid_move = true;
-        } else if (char == 'a') {
-            moveAmpersand('left');
-            valid_move = true;
-        } else if (char == 's') {
-            moveAmpersand('down');
-            valid_move = true;
-        } else if (char == 'd') {
-            moveAmpersand('right');
-            valid_move = true;
-        } else if (char == 'r') {
+        } else if (event.which == 82) {
             if (bombs > 0) {
                 valid_move = true;
-                streak = 0;
+                killStreak();
                 useBomb();
                 bombs--;
                 bombs_used++;
@@ -149,7 +161,7 @@ $(document).keypress(function(event) {
             if (steps % 10 == 0) {
                 enemy_threshold -= .01;
             }
-            score++;
+            addScore(1);
             if (bombPresent(am_pos)) {
                 collectBombAt(am_pos);
             }
@@ -169,16 +181,18 @@ $(document).keypress(function(event) {
     } else {
         if (game_over) {
             $("#youLost").slideUp(70);
+            $("#newHigh").slideUp(70);
             $(".grayOut").fadeOut(70);
             reset();
             game_over = false;
         } else {
             $("#infoPanel").slideUp(70);
+            $("#controlPanel").slideUp(70);
             $(".grayOut").fadeOut(70);
         }
         time_out = false;
     }
-});
+}
 
 function reset() {
     if (score > high) {
@@ -202,9 +216,10 @@ function reset() {
     $(".ampersand").css('top', '21vw');
 }
 
-function moveAmpersand(direction) {
+function moveAmpersand(code) {
+    direction = move_scheme.indexOf(code);
     killed = false;
-    if (direction == 'left') {
+    if (direction == 2) {
         if (am_pos[1] == 0) {
             nudge(direction);
             flipAll();
@@ -217,7 +232,7 @@ function moveAmpersand(direction) {
             $(".ampersand").animate({left: ((am_pos[1]-1)*ONESQ + 1) + 'vw'}, 10);
             am_pos[1]--;
         }
-    } else if (direction == 'right') {
+    } else if (direction == 0) {
         if (am_pos[1] == 8) {
             nudge(direction)
             flipAll();
@@ -230,7 +245,7 @@ function moveAmpersand(direction) {
             $(".ampersand").animate({left: ((am_pos[1]+1)*ONESQ + 1) + 'vw'}, 10);
             am_pos[1]++;
         }
-    } else if (direction == 'up') {
+    } else if (direction == 1) {
         if (am_pos[0] == 0) {
             nudge(direction)
             flipAll();
@@ -290,7 +305,7 @@ function attack(direction) {
     killed = true;
     kills++;
     streak++;
-    score += streak * 10;
+    addScore(streak * 10);
     if (streak > highest_streak) {
         highest_streak = streak;
     }
@@ -439,6 +454,7 @@ function moveEnemies() {
 function end_game() {
     time_out = true;
     game_over = true;
+    $("#newHighPanel").slideUp(70);
     $("#streakPanel").slideUp(70);
     $("#panelScore").html(score);
     $("#panelKills").html(kills);
@@ -447,6 +463,10 @@ function end_game() {
     $("#panelStreak").html(highest_streak);
     $("#youLost").slideDown(70);
     $(".grayOut").fadeIn(70);
+    if (new_high) {
+        $("#newHigh").slideDown(70);
+    }
+    new_high = false;
 }
 
 function c_add(c1, c2) {
@@ -588,11 +608,11 @@ function updateStats() {
 }
 
 function useBomb() {
-    for (let i = 0; i < BOMB_ZOME.length; i++) {
-        let potential = c_add(am_pos, BOMB_ZOME[i]);
+    for (let i = 0; i < BOMB_ZONE.length; i++) {
+        let potential = c_add(am_pos, BOMB_ZONE[i]);
         if (validSquare(potential) && enemyPresent(potential)) {
             removeEnemy(potential);
-            score += 5;
+            addScore(5);
             kills++;
         }
     }
@@ -703,8 +723,12 @@ function resetAllColors() {
     $("#panelScore").css('color', color_scheme.green_text_death.color);
     $("#streak").css('color', color_scheme.red_text.color);
     $("#panelStreak").css('color', color_scheme.red_text_death.color);
+    $("#sideKills").css('color', color_scheme.red_text.color);
+    $("#panelKills").css('color', color_scheme.red_text_death.color);
     $("#sideBombs").css('color', color_scheme.yellow_text.color);
     $("#panelBombsUsed").css('color', color_scheme.yellow_text_death.color);
+    $("#newHighPanel").css('color', color_scheme.green_text.color);
+    $("#newHigh").css('color', color_scheme.green_text_death.color);
     $("#f").css('color', color_scheme.f_text.color);
 }
 
@@ -716,4 +740,12 @@ function resetAllEnemyOdds() {
         $("#en" + enemy.id).css('color', color_scheme.enemy.color);
         $("#en" + enemy.id).html(getEvenOdd(enemy.odd));
     });
+}
+
+function addScore(amt) {
+    score += amt;
+    if (score > high && high > 0) {
+        $("#newHighPanel").slideDown(70);
+        new_high = true;
+    }
 }

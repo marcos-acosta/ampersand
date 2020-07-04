@@ -9,7 +9,6 @@
     
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM Plex Mono">
         <link rel="stylesheet" href="css/main.css">
         <link rel="icon" href="images/ampersand.png">
@@ -17,7 +16,12 @@
         <title>ampersand</title>
     </head>
     <body>
-        <div class="losePanel mono" tabindex="-1" role="dialog" id="youLost">
+        <div class="losePanel mono" style="top: 10vw; height: 3vw; text-align: center; padding-left: 0; display: none;" id="newHigh">
+            <span style="position: absolute; top: .4vw; left: 3.8vw; font-size: 1.5vw;">
+                !! NEW HIGH !!
+            </span>
+        </div>
+        <div class="losePanel mono" id="youLost" style="display: none;">
             <div class="losePanelHeader">
                 #### <span id="f">f</span> ####
                 <hr>
@@ -33,13 +37,13 @@
                 press any key to try again
             </div>
         </div>
-        <div class="losePanel mono" style="height: 39vw; top: 9vw;" tabindex="-1" role="dialog" id="infoPanel">
+        <div class="losePanel mono" style="height: 39vw; top: 9vw; display: none;" id="infoPanel">
             <div class="losePanelHeader">
                 #### ? ####
                 <hr>
             </div>
             <div class="losePanelBody" style="height: 8vw;">
-                <span class="lighter">move:</span><div class="rightSide">wasd</div><br>
+                <span class="lighter">move:</span><div class="rightSide"><span id="helpMove">wasd</span></div><br>
                 <span class="lighter">use bomb:</span><div id="panelKills" class="rightSide">r</div><br>
                 <span class="lighter">objective:</span><div id="panelBombsUsed" class="rightSide">survive</div><br>
                 <hr>
@@ -51,11 +55,39 @@
                 press any key to continue
             </div>
         </div>
+        <div class="losePanel mono" style="height: 14vw; top: 15vw; display: none;" id="controlPanel">
+            <div class="losePanelHeader">
+                < controls >
+                <hr>
+            </div>
+            <div class="losePanelBody" style="height: 5vw;">
+                <span class="lighter">move:</span>
+                <div class="rightSide" style="right: 8.5vw;">
+                    <div class="toggleButton" id="toggleMove">
+                        wasd
+                    </div>
+                </div>
+                <br>
+            </div>
+            <div class="losePanelFooter lighter">
+                press any key to continue
+            </div>
+        </div>
         <div class="popup mono" id="streakPanel" style="display: none;">
             <span class="lighter">streak: </span><span id="streak">0</span>
         </div>
+        <div class="popup mono" id="newHighPanel" style="top: 7vw; display: none;">
+            NEW BEST
+        </div>
         <div class="grayOut"></div>
-        <div class="info mono" id="info">??</div>
+        <div class="info mono" id="info">
+            ?
+            <span class="tooltiptext">help</span>
+        </div>
+        <div class="info mono" id="controls" style="top: 10vw;">
+            &
+            <span class="tooltiptext">controls</span>
+        </div>
         <div class="title">
             ampersand
         </div>
