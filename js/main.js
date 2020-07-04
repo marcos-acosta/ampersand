@@ -50,6 +50,15 @@ const BW_COLORS = {
     yellow_text: {
         color: 'white'
     },
+    green_text_death: {
+        color: 'black'
+    },
+    red_text_death: {
+        color: 'black'
+    },
+    yellow_text_death: {
+        color: 'black'
+    },
     f_text: {
         color: 'rgb(37, 37, 37)'
     }
@@ -75,6 +84,15 @@ const COLOR_COLORS = {
         color: 'rgb(245, 93, 66)'
     },
     yellow_text: {
+        color: 'rgb(212, 191, 32)'
+    },
+    green_text_death: {
+        color: 'rgb(46, 201, 32)'
+    },
+    red_text_death: {
+        color: 'rgb(245, 93, 66)'
+    },
+    yellow_text_death: {
         color: 'rgb(212, 191, 32)'
     },
     f_text: {
@@ -682,11 +700,11 @@ function resetAllColors() {
         $("#b" + bomb.id).css('color', color_scheme.bomb.color);
     });
     $("#sideScore").css('color', color_scheme.green_text.color);
-    $("#panelScore").css('color', color_scheme.green_text.color);
+    $("#panelScore").css('color', color_scheme.green_text_death.color);
     $("#streak").css('color', color_scheme.red_text.color);
-    $("#panelStreak").css('color', color_scheme.red_text.color);
+    $("#panelStreak").css('color', color_scheme.red_text_death.color);
     $("#sideBombs").css('color', color_scheme.yellow_text.color);
-    $("#panelBombsUsed").css('color', color_scheme.yellow_text.color);
+    $("#panelBombsUsed").css('color', color_scheme.yellow_text_death.color);
     $("#f").css('color', color_scheme.f_text.color);
 }
 
