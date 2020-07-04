@@ -5,7 +5,7 @@ var ex_count = 0;
 var en_count = 0;
 var b_count = 0;
 var enemy_threshold = .65;
-var bomb_threshold = .95;
+var bomb_threshold = .92;
 var score = 0;
 var bombs = 3;
 var kills = 0;
@@ -49,6 +49,9 @@ const BW_COLORS = {
     },
     yellow_text: {
         color: 'white'
+    },
+    f_text: {
+        color: 'rgb(37, 37, 37)'
     }
 }
 const COLOR_COLORS = {
@@ -73,6 +76,9 @@ const COLOR_COLORS = {
     },
     yellow_text: {
         color: 'rgb(212, 191, 32)'
+    },
+    f_text: {
+        color: 'rgb(245, 93, 66)'
     }
 }
 var bw = true;
@@ -124,7 +130,6 @@ $(document).keypress(function(event) {
             steps++;
             if (steps % 10 == 0) {
                 enemy_threshold -= .01;
-                bomb_threshold -= .001;
             }
             score++;
             if (bombPresent(am_pos)) {
@@ -135,6 +140,9 @@ $(document).keypress(function(event) {
             resetAllEnemyOdds();
             if (Math.random() > enemy_threshold) {
                 newEnemy();
+                if (Math.random() > (enemy_threshold + .2)) {
+                    newEnemy();
+                }
             }
             if (Math.random() > bomb_threshold) {
                 newBomb();
@@ -679,7 +687,7 @@ function resetAllColors() {
     $("#panelStreak").css('color', color_scheme.red_text.color);
     $("#sideBombs").css('color', color_scheme.yellow_text.color);
     $("#panelBombsUsed").css('color', color_scheme.yellow_text.color);
-    $("#f").css('color', color_scheme.red_text.color);
+    $("#f").css('color', color_scheme.f_text.color);
 }
 
 function resetAllEnemyOdds() {
@@ -688,5 +696,6 @@ function resetAllEnemyOdds() {
         let color = getColor(enemy.odd);
         $("#en" + enemy.id).css('background-color', color);
         $("#en" + enemy.id).css('color', color_scheme.enemy.color);
+        $("#en" + enemy.id).html(getEvenOdd(enemy.odd));
     });
 }
